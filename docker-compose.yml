@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  convert_image_local:
+    container_name: convert_image_local
+    privileged: true
+    working_dir: /app
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./:/app
+    env_file:
+      - ./.env
+    ports:
+      - "5000:5000"
