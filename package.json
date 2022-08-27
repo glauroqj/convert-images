@@ -2,13 +2,12 @@
   "name": "convert-images",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
     "heroku-prebuild": "yarn install --production=false",
     "build": "webpack --config webpack-server-prod.js",
-    "start": "node ./dist/server.bundle.js",
-    "dev": "nodemon --exec babel-node ./src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./build/bundle.js",
+    "dev": "rollup -w -c ./rollup/dev.config.js",
     "----- DOCKER DEVELOPER -----": "",
     "dev-start": "docker-compose up -d --build && docker ps && yarn dev-logs",
     "dev-stop": "docker-compose stop && docker ps",
@@ -29,5 +28,18 @@
   "bugs": {
     "url": "https://github.com/glauroqj/convert-images/issues"
   },
-  "homepage": "https://github.com/glauroqj/convert-images#readme"
+  "homepage": "https://github.com/glauroqj/convert-images#readme",
+  "devDependencies": {
+    "@babel/core": "^7.18.13",
+    "@babel/preset-env": "^7.18.10",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-run": "^2.1.0",
+    "rollup": "^2.78.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "rollup-plugin-babel": "^4.4.0"
+  }
 }
