@@ -23,3 +23,7 @@ export default [
     },
   },
 ];
+
+/**
+ * OOC: https://hoangvvo.com/blog/node-es6-rollup
+ */
