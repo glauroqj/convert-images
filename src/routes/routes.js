@@ -1,7 +1,7 @@
 import cors from "cors";
 import bodyParser from "body-parser";
 /** APIS */
-import convert from "./convert";
+import upload from "./upload";
 // import posts from './posts'
 // import gets from './gets'
 
@@ -15,7 +15,7 @@ export default (app) => {
     credentials: true,
   };
 
-  convert({ app, parser: urlBodyParser, cors, corsOptions });
+  upload({ app, parser: urlBodyParser, cors, corsOptions });
   // posts({app, parser: urlBodyParser, cors, corsOptions})
   // gets({app, parser: urlBodyParser, cors, corsOptions})
 };
