@@ -9,7 +9,8 @@ export default (app) => {
   const corsOptions = {
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     preflightContinue: true,
-    origin: process?.env?.WEBORIGIN,
+    // origin: process?.env?.WEBORIGIN,
+    origin: "*",
     credentials: true,
   };
 

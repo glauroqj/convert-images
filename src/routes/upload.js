@@ -7,10 +7,13 @@ import uploadImageS3 from "../services/upload-image-s3";
 const upload = multer({ storage: multer.memoryStorage() });
 
 export default ({ app, parser, cors, corsOptions }) => {
-  app.get("/health-check", parser, cors(corsOptions), (req, res) => {
-    console.log("< HEALTH CHECK - OK >");
-    res.json({ status: "Server is running!" });
-  });
+  app.get(
+    "/health-check",
+    /*parser, cors(corsOptions),*/ (req, res) => {
+      console.log("< HEALTH CHECK - OK >");
+      res.json({ status: "Server is running!" });
+    }
+  );
 
   app.post(
     "/upload-file",
