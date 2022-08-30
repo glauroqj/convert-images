@@ -11,6 +11,7 @@ export default ({ app, parser, cors, corsOptions }) => {
     "/health-check",
     /*parser, cors(corsOptions),*/ (req, res) => {
       console.log("< HEALTH CHECK - OK >");
+
       res.json({ status: "Server is running!" });
     }
   );
