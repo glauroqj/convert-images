@@ -1,14 +1,10 @@
 import multer from "multer";
-import fs from "fs";
-import AWS from "aws-sdk";
 
-import { convertImage, bufferToStream } from "../utils/convertImage";
 import imageminHelper from "../utils/imageMin";
 
-const upload = multer({ storage: multer.memoryStorage() });
+import uploadImageS3 from "../services/upload-image-s3";
 
-/** aws configs */
-import { aws_access, aws_params } from "../../aws-config";
+const upload = multer({ storage: multer.memoryStorage() });
 
 export default ({ app, parser, cors, corsOptions }) => {
   app.get("/health-check", parser, cors(corsOptions), (req, res) => {
@@ -24,64 +20,60 @@ export default ({ app, parser, cors, corsOptions }) => {
     async (req, res) => {
       if (!req.file) {
         res.status(500).send({
-          message: "something got wrong!",
+          message: "something got wrong! Send a body with image atribute",
         });
       }
 
-      const stream = bufferToStream(req?.file?.buffer);
-      // console.log("< IMAGE URL > ", stream);
-      const output = await convertImage(stream, "webp");
-
-      console.log("< OUTPUT > ", output);
-      // output.pipe(process.stdout);
-      // output.pipe(fs.createWriteStream("./image.webp"));
-
-      res.status(200);
-    }
-  );
-
-  app.post(
-    "/upload-file-imagemin",
-    parser,
-    cors(corsOptions),
-    upload.single("image"),
-    async (req, res) => {
-      if (!req.file) {
-        res.status(500).send({
-          message: "something got wrong!",
-        });
-      }
-
-      console.log("< FILE > ", req?.file);
-
-      const image = await imageminHelper(req?.file?.buffer);
-
-      fs.writeFile("./uploads/test.webp", image, "binary", (err) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("File created successfully!");
-        }
-      });
-
-      const s3 = new AWS.S3({
-        ...aws_access,
-      });
-
-      const params = {
-        ...aws_params,
-        Key: "imagem-maneira.webp",
-        Body: image,
-      };
+      // console.log("< FILE > ", req?.file);
 
       try {
-        s3.upload(params, (err, data) => {
-          console.log("< AWS S3 UPLOAD >", err, data);
-          res.status(200).send({
-            message: "Sended!",
+        const arrayImages = await imageminHelper(req?.file?.buffer);
+
+        if (arrayImages?.length > 0) {
+          const buildPromise = arrayImages.map((item) => uploadImageS3(item));
+
+          Promise.all(buildPromise)
+            .then((values) => {
+              console.log("< UPLOAD S3 - RESPONSE > ", values);
+
+              const newReponsePayload = values.reduce((acc, cur) => {
+                /* check format */
+                let oldPayload = {
+                  image: "",
+                };
+                if (cur.format === "webp") {
+                  oldPayload.image = cur?.url;
+                  acc = {
+                    ...acc,
+                    ...oldPayload,
+                  };
+                }
+
+                acc = {
+                  ...acc,
+                  [`image_${cur?.format}`]: cur?.url,
+                };
+
+                return acc;
+              }, {});
+
+              res.status(200).send({
+                ...newReponsePayload,
+              });
+            })
+            .catch((e) => {
+              console.warn(e);
+              res.status(500).send({
+                message: "something got wrong!",
+              });
+            });
+        } else {
+          res.status(400).send({
+            message: "something got wrong in imageminHelper",
           });
-        });
+        }
       } catch (e) {
+        console.warn(e);
         res.status(500).send({
           message: "something got wrong!",
         });

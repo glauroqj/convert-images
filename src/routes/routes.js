@@ -2,8 +2,6 @@ import cors from "cors";
 import bodyParser from "body-parser";
 /** APIS */
 import upload from "./upload";
-// import posts from './posts'
-// import gets from './gets'
 
 export default (app) => {
   const urlBodyParser = bodyParser.json();
@@ -16,6 +14,4 @@ export default (app) => {
   };
 
   upload({ app, parser: urlBodyParser, cors, corsOptions });
-  // posts({app, parser: urlBodyParser, cors, corsOptions})
-  // gets({app, parser: urlBodyParser, cors, corsOptions})
 };
