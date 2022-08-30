@@ -4,8 +4,8 @@ const s3 = new AWS.S3({
   // accessKeyId: "AKIASDIQ5NHR2LKCA774",
   // secretAccessKey: "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",
   // region: "sa-east-1",
-  accessKeyId: process.env.ACCESS_KEY,
-  secretAccessKey: process.env.SECRET_KEY,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 });
 
