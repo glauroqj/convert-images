@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "build": "rollup -c ./rollup/dev.config.js",
+    "build": "rollup -c ./rollup/prod.config.js",
     "start": "node ./build/bundle.js",
     "dev": "rollup -w -c ./rollup/dev.config.js",
     "----- DOCKER DEVELOPER -----": "",
