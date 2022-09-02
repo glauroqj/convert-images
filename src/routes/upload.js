@@ -66,8 +66,8 @@ export default ({ app, parser, cors, corsOptions }) => {
               });
             })
             .catch((e) => {
-              console.warn(e);
-              res.status(500).send({
+              console.warn("< ERROR >", e);
+              res.status(400).send({
                 message: "something got wrong!",
               });
             });
@@ -78,7 +78,7 @@ export default ({ app, parser, cors, corsOptions }) => {
         }
       } catch (e) {
         console.warn(e);
-        res.status(500).send({
+        res.status(400).send({
           message: "something got wrong!",
         });
       }
