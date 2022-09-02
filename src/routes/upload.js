@@ -28,8 +28,6 @@ export default ({ app, parser, cors, corsOptions }) => {
         });
       }
 
-      // console.log("< FILE > ", req?.file);
-
       try {
         const arrayImages = await imageminHelper(req?.file?.buffer);
 
